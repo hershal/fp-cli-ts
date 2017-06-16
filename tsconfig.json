@@ -12,10 +12,11 @@
     ]
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "typings/index.d.ts"
   ],
   "exclude": [
     "node_modules",
-    "**/*-spec.ts"
+    "**/*Spec.ts"
   ]
 }

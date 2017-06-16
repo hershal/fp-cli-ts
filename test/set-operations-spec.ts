@@ -7,18 +7,18 @@ describe('Set Operations', function() {
     let list0 = ['one', 'two', 'three'];
     let list1 = ['one', 'two', 'four'];
     let list2 = ['five', 'two', 'four'];
-    let restList = [list1, list2];
+    let args = [list0, list1, list2];
 
     describe('XOR', function() {
         it('Returns the identity with one list', function () {
             let xorOperation = new XOR();
-            let xorList = xorOperation.run(list0, [[]]);
+            let xorList = xorOperation.run([list0]);
             expect(xorList).to.deep.equal(list0);
         });
 
         it('Computes the Symmetric Difference between lists', function () {
             let xorOperation = new XOR();
-            let xorList = xorOperation.run(list0, restList);
+            let xorList = xorOperation.run(args);
             expect(xorList).to.deep.equal(['three', 'five']);
         });
     });
@@ -26,20 +26,20 @@ describe('Set Operations', function() {
     describe('Cat', function () {
         it('Returns the identity with one list', function () {
             let catOperation = new Cat();
-            let catList = catOperation.run(list0, [[]]);
+            let catList = catOperation.run([list0]);
             expect(catList).to.deep.equal(list0);
         });
 
         it('Concatenates two lists', function () {
             let catOperation = new Cat();
-            let catList = catOperation.run(list0, [list1]);
+            let catList = catOperation.run([list0, list1]);
             expect(catList).to.deep.equal(['one', 'two', 'three',
                                            'one', 'two', 'four']);
         });
 
         it('Concatenates three lists', function () {
             let catOperation = new Cat();
-            let catList = catOperation.run(list0, restList);
+            let catList = catOperation.run(args);
             expect(catList).to.deep.equal(['one', 'two', 'three',
                                            'one', 'two', 'four',
                                            'five', 'two', 'four']);

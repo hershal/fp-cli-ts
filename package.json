@@ -23,6 +23,7 @@
     "watch:test": "npm run test -- --watch"
   },
   "dependencies": {
+    "@types/es6-promise": "0.0.32",
     "lodash": "^4.17.4"
   },
   "devDependencies": {

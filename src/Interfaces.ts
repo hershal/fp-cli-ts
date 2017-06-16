@@ -1,7 +1,18 @@
-export interface SetOperation {
-    run(first: string[], rest: string[][]): string[];
+export interface ISetOperation {
+    run(data: string[][]): string[];
 }
 
-export interface FunctionalOperation {
+export interface IFunctionalOperation {
     run(input: string[], code: string): string[];
+}
+
+export interface IError {
+    domain: string;
+    reason: string;
+    resolution: string;
+}
+
+export interface IDispatcherResults {
+    error?: IError;
+    results: string[];
 }
