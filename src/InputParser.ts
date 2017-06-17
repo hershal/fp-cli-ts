@@ -1,6 +1,9 @@
 import StreamSerializer from './StreamSerializer';
 import * as fs from 'fs';
 
+import * as debugImport from 'debug';
+const debug = debugImport('InputParser');
+
 /* Argument Parser. */
 /* This parser is asynchronous because reading multiple files synchronously is
  * such a bore. As such, it returns an ES2015 Promise. */
@@ -31,17 +34,25 @@ export default class InputParser {
         });
 
         if (process.stdin.isTTY) {
+            debug(`Process is an interactive TTY.`);
             return Promise.all(readFilePromises);
         }
 
-        let stdin;
+        debug(`Process is a pipe. Reading from stdin...`);
+        const stdin = new Promise((resolve, reject) => {
+            const serializer = new StreamSerializer();
 
-        const serializer = new StreamSerializer();
-        process.stdin.on('data', (data: Buffer) => {
-            serializer.serialize(data);
-        });
-        process.stdin.on('close', (data: Buffer) => {
-            stdin = serializer.flush(data).toString();
+            process.stdin.on('data', (data: Buffer) => {
+                debug(`Stdin sent chunk of size ${data.length}.`);
+                serializer.serialize(data);
+            });
+
+            process.stdin.on('end', () => {
+                debug(`Stdin ended.`);
+                const returnString = serializer.flush().toString().split('\n');
+                debug(`Serialized chunks. Total size ${returnString.length}.`);
+                resolve(returnString);
+            });
         });
 
         return Promise.all([stdin, ...readFilePromises]);
