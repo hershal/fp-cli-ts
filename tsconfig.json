@@ -10,7 +10,8 @@
     "typeRoots": [
       "./node_modules/@types"
     ],
-    "target": "es2015"
+    "target": "es2015",
+    "sourceMap": true
   },
   "include": [
     "src/**/*",
