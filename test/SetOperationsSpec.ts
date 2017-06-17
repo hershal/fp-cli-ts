@@ -1,4 +1,4 @@
-import {XOR, Cat} from '../src/SetOperations';
+import {Cat, Union, XOR} from '../src/SetOperations';
 
 import * as chai from "chai";
 const expect = chai.expect;
@@ -23,6 +23,26 @@ describe('Set Operations', function() {
         });
     });
 
+    describe('Union', function () {
+        it('Returns the identity with one list', function () {
+            let unionOperation = new Union();
+            let unionList = unionOperation.run([list0]);
+            expect(unionList).to.deep.equal(list0);
+        });
+
+        it('Unionizes two lists', function () {
+            let unionOperation = new Union();
+            let unionList = unionOperation.run([list0, list1]);
+            expect(unionList).to.deep.equal(['one', 'two', 'three', 'four']);
+        });
+
+        it('Unionizes three lists', function () {
+            let unionOperation = new Union();
+            let unionList = unionOperation.run(args);
+            expect(unionList).to.deep.equal(['one', 'two', 'three', 'four', 'five']);
+        });
+    });
+
     describe('Cat', function () {
         it('Returns the identity with one list', function () {
             let catOperation = new Cat();
@@ -33,13 +53,17 @@ describe('Set Operations', function() {
         it('Concatenates two lists', function () {
             let catOperation = new Cat();
             let catList = catOperation.run([list0, list1]);
-            expect(catList).to.deep.equal(['one', 'two', 'three', 'four']);
+            expect(catList).to.deep.equal(['one', 'two', 'three',
+                                           'one', 'two', 'four']);
         });
 
         it('Concatenates three lists', function () {
             let catOperation = new Cat();
             let catList = catOperation.run(args);
-            expect(catList).to.deep.equal(['one', 'two', 'three', 'four', 'five']);
+            expect(catList).to.deep.equal(['one', 'two', 'three',
+                                           'one', 'two', 'four',
+                                           'five', 'two', 'four']);
         });
     });
+
 });

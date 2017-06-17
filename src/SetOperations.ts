@@ -10,9 +10,16 @@ export class XOR implements ISetOperation {
     }
 }
 
+/* Unions lists together. */
+export class Union implements ISetOperation {
+    public run(data: string[][]): string[] {
+        return _.union(...data);
+    }
+}
+
 /* Concatenates lists together. */
 export class Cat implements ISetOperation {
     public run(data: string[][]): string[] {
-        return _.uniq(_.concat(...data));
+        return _.concat(...data);
     }
 }
