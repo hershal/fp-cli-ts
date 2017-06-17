@@ -9,7 +9,8 @@
     "removeComments": true,
     "typeRoots": [
       "./node_modules/@types"
-    ]
+    ],
+    "target": "es2015"
   },
   "include": [
     "src/**/*",
