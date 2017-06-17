@@ -11,19 +11,19 @@ export default class InputParser {
         this.serializer = new StreamSerializer();
     }
 
-    public async parse(files: string[]): Promise<string[][]> {
+    public parse(files: string[]): Promise<string[][]> {
 
         /* TODO: I'm probably going to have to extract out logic here to support
          * more complex transformations. */
         const readFilePromises = files.map((f) => {
             return new Promise<string[]>((resolve, reject) => {
-                fs.readFile(f, (error, data) => {
+                fs.readFile(f, (error: any, data: Buffer) => {
                     if (error) { reject(error); return; }
 
                     const formattedData = data
                         .toString()
                         .split('\n')
-                        .filter((s) => s.length > 0);
+                        .filter((s: string) => s.length > 0);
 
                     resolve(formattedData);
                 });
@@ -31,7 +31,7 @@ export default class InputParser {
         });
 
         if (process.stdin.isTTY) {
-            return await Promise.all(readFilePromises);
+            return Promise.all(readFilePromises);
         }
 
         let stdin;
@@ -44,6 +44,6 @@ export default class InputParser {
             stdin = serializer.flush(data).toString();
         });
 
-        return await Promise.all([stdin, ...readFilePromises]);
+        return Promise.all([stdin, ...readFilePromises]);
     }
 }
