@@ -13,6 +13,6 @@ export class XOR implements ISetOperation {
 /* Concatenates lists together. */
 export class Cat implements ISetOperation {
     public run(data: string[][]): string[] {
-        return _.concat(...data);
+        return _.uniq(_.concat(...data));
     }
 }

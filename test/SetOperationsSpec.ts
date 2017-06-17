@@ -33,16 +33,13 @@ describe('Set Operations', function() {
         it('Concatenates two lists', function () {
             let catOperation = new Cat();
             let catList = catOperation.run([list0, list1]);
-            expect(catList).to.deep.equal(['one', 'two', 'three',
-                                           'one', 'two', 'four']);
+            expect(catList).to.deep.equal(['one', 'two', 'three', 'four']);
         });
 
         it('Concatenates three lists', function () {
             let catOperation = new Cat();
             let catList = catOperation.run(args);
-            expect(catList).to.deep.equal(['one', 'two', 'three',
-                                           'one', 'two', 'four',
-                                           'five', 'two', 'four']);
+            expect(catList).to.deep.equal(['one', 'two', 'three', 'four', 'five']);
         });
     });
 });
