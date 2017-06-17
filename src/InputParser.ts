@@ -25,7 +25,7 @@ export default class InputParser {
                         .split('\n')
                         .filter((s) => s.length > 0);
 
-                     resolve(formattedData);
+                    resolve(formattedData);
                 });
             });
         });
