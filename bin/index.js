@@ -4,8 +4,8 @@
 const path = require('path');
 
 /* Node v8.1.2 does not support ES2015-style modules without --harmony. */
-const InputParser = require('../lib/InputParser.js').default;
-const Dispatcher = require('../lib/Dispatcher.js').default;
+const InputParser = require('../dist/InputParser.js').default;
+const Dispatcher = require('../dist/Dispatcher.js').default;
 
 let program = path.basename(process.argv[1], '.js');
 

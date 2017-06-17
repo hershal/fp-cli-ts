@@ -57,5 +57,10 @@
     ],
     "reporter": [],
     "all": true
+  },
+  "bin": {
+    "fcat": "./bin/index.js",
+    "funion": "./bin/index.js",
+    "fxor": "./bin/index.js"
   }
 }
