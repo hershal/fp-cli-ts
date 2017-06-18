@@ -23,10 +23,11 @@ debug(`Decoded program ${program}`);
 const argv = process.argv.slice(2);
 
 debug('Parsing arguments...');
-debug(`Dispatching ${argv.length} input argument(s) to ${program}.`);
 verbose(`Got argv %O`, argv);
 
-Dispatcher.execute(program, argv).then((results) => {
+debug(`Dispatching ${argv.length} input argument(s) to ${program}.`);
+
+Dispatcher.dispatch(program, argv).then((results) => {
   if (results.error) {
     console.log(results.error);
     debug(`Error: %O`, results.error);

@@ -1,12 +1,14 @@
 import * as SetOperations from './SetOperations';
+import { IOperation } from './Interfaces';
+
 
 export default class Dispatcher {
     /* TODO: this is not fully generalized. E.g. I don't have arguments here... */
-    public static execute(program: string, args: string[]): Promise<string[]> {
-        const operation = Dispatcher.operationHash[program];
+    public static dispatch(program: string, args: string[]): Promise<string[]> {
+        const operationSelector = Dispatcher.operationHash[program];
 
         /* Short-circuit */
-        if (!operation) {
+        if (!operationSelector) {
             return Promise.reject({
                 domain: 'Internal',
                 reason: `Could not find ${program} in the set of supported operations.`,
@@ -14,8 +16,15 @@ export default class Dispatcher {
             });
         }
 
-        const concreteOperation: SetOperations.SetOperation = new operation();
-        return operation.run(args);
+        const operation: IOperation = new operationSelector();
+
+        return new Promise((resolve, reject) => {
+            operation
+                .parse(args)
+                .then((data) => operation.run(data))
+                .then((results) => resolve(results))
+                .catch((error) => reject(error))
+        })
     }
 
     private static operationHash: {[key: string]: any} = {

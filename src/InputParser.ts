@@ -12,11 +12,9 @@ export class InputParserReadFilesOptionalStandardInput {
 
     constructor() {
         this.serializer = new StreamSerializer();
-
     }
 
     public parse(files: string[]): Promise<string[][]> {
-
         /* TODO: I'm probably going to have to extract out logic here to support
          * more complex transformations. */
         const readFilePromises = files.map((f) => {
@@ -34,18 +32,25 @@ export class InputParserReadFilesOptionalStandardInput {
             });
         });
 
-        if (process.stdin.isTTY) {
-            this.debug(`Process is an interactive TTY.`);
+        const flowing = (process as any).stdin._readableState.flowing;
+        const isTTY = process.stdin.isTTY;
+
+        if (isTTY || !flowing) {
+            this.debug(`Process is an interactive TTY or is not flowing. Reading files.`);
             return Promise.all(readFilePromises);
         }
 
-        this.debug(`Process is a pipe. Reading from stdin...`);
+        this.debug(`Process is a pipe. Reading from stdin and files.`);
         const stdin = new Promise((resolve, reject) => {
             const serializer = new StreamSerializer();
 
             process.stdin.on('data', (data: Buffer) => {
                 this.debug(`Stdin sent chunk of size ${data.length}.`);
                 serializer.serialize(data);
+            });
+
+            process.stdin.on('close', () => {
+                this.debug(`Stdin closed.`);
             });
 
             process.stdin.on('end', () => {
