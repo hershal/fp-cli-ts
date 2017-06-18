@@ -17,10 +17,11 @@
     "clean": "rimraf dist",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
     "build": "npm run clean && npm run lint && echo Using TypeScript && tsc --version && tsc --pretty",
-    "test": "npm run build && mocha --compilers ts:ts-node/register --recursive 'test/**/*Spec.ts'",
+    "test": "mocha --compilers ts:ts-node/register --recursive 'test/**/*Spec.ts'",
     "coverage": "nyc --include='src/**/*.ts' --reporter=text --reporter=html --reporter=lcov mocha --compilers ts:ts-node/register --recursive 'test/**/*.test.ts'",
     "watch": "npm run build -- --watch",
-    "watch:test": "npm run test -- --watch"
+    "incremental": "npm run lint && tsc --pretty && npm run test",
+    "watch:test": "nodemon -e '*' -w . -i dist -x 'npm run incremental'"
   },
   "dependencies": {
     "lodash": "^4.17.4"
@@ -32,6 +33,7 @@
     "chai": "^3.0.0",
     "coveralls": "^2.0.0",
     "mocha": "^3.0.0",
+    "nodemon": "^1.11.0",
     "nyc": "^10.0.0",
     "rimraf": "^2.0.0",
     "ts-node": "^3.0.0",
