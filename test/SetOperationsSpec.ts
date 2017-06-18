@@ -1,5 +1,5 @@
 import { IOperation } from '../src/Interfaces';
-import {Cat, Union, XOR} from '../src/SetOperations';
+import * as SetOperations from '../src/SetOperations';
 
 import * as chai from "chai";
 const expect = chai.expect;
@@ -20,42 +20,42 @@ describe('Set Operations', function() {
 
     describe('XOR', function() {
         it('Returns the identity with one list', function (done) {
-            checkOperation(new XOR(), [list0], list0, done);
+            checkOperation(new SetOperations.XOR(), [list0], list0, done);
         });
 
         it('Computes the Symmetric Difference between lists', function (done) {
-            checkOperation(new XOR(), args, ['three', 'five'], done);
+            checkOperation(new SetOperations.XOR(), args, ['three', 'five'], done);
         });
     });
 
     describe('Union', function () {
         it('Returns the identity with one list', function (done) {
-            checkOperation(new Union(), [list0], list0, done);
+            checkOperation(new SetOperations.Union(), [list0], list0, done);
         });
 
         it('Unionizes two lists', function (done) {
-            checkOperation(new Union(), [list0, list1], ['one', 'two', 'three', 'four'], done);
+            checkOperation(new SetOperations.Union(), [list0, list1], ['one', 'two', 'three', 'four'], done);
         });
 
         it('Unionizes three lists', function (done) {
-            checkOperation(new Union(), args, ['one', 'two', 'three', 'four', 'five'], done);
+            checkOperation(new SetOperations.Union(), args, ['one', 'two', 'three', 'four', 'five'], done);
         });
     });
 
     describe('Cat', function () {
         it('Returns the identity with one list', function (done) {
-            checkOperation(new Cat(), [list0], list0, done);
+            checkOperation(new SetOperations.Cat(), [list0], list0, done);
         });
 
         it('Concatenates two lists', function (done) {
-            checkOperation(new Cat(), [list0, list1], ['one', 'two', 'three',
+            checkOperation(new SetOperations.Cat(), [list0, list1], ['one', 'two', 'three',
                                                        'one', 'two', 'four'], done);
         });
 
         it('Concatenates three lists', function (done) {
-            checkOperation(new Cat(), args, ['one', 'two', 'three',
-                                             'one', 'two', 'four',
-                                             'five', 'two', 'four'], done);
+            checkOperation(new SetOperations.Cat(), args, ['one', 'two', 'three',
+                                                           'one', 'two', 'four',
+                                                           'five', 'two', 'four'], done);
         });
     });
 
