@@ -1,25 +1,48 @@
-import { ISetOperation } from './Interfaces';
+import { IOperation } from './Interfaces';
+import { InputParserReadFilesOptionalStandardInput } from './InputParser';
 
 import * as _ from 'lodash';
 
+export class SetOperation {
+    private parser: InputParserReadFilesOptionalStandardInput;
+
+    constructor() {
+        this.parser = new InputParserReadFilesOptionalStandardInput();
+    }
+
+    protected _run(args: string[], operation: (data: string[][]) => string[]): Promise<string[]> {
+        return new Promise((resolve, reject) => {
+            this.parse(args).then((data) => {
+                resolve(operation(data));
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+    }
+
+    public parse(argv: string[]): Promise<string[][]> {
+        return this.parser.parse(argv);
+    }
+}
+
 /* Computes the Symmetric Difference of the input arrays. */
 /* https://en.wikipedia.org/wiki/Symmetric_difference */
-export class XOR implements ISetOperation {
-    public run(data: string[][]): string[] {
-        return _.xor(...data);
+export class XOR extends SetOperation implements IOperation {
+    public run(data: string[][]): Promise<string[]> {
+        return new Promise((resolve, reject) => resolve(_.xor(...data)));
     }
 }
 
 /* Unions lists together. */
-export class Union implements ISetOperation {
-    public run(data: string[][]): string[] {
-        return _.union(...data);
+export class Union extends SetOperation implements IOperation {
+    public run(data: string[][]): Promise<string[]> {
+        return new Promise((resolve, reject) => resolve(_.union(...data)));
     }
 }
 
 /* Concatenates lists together. */
-export class Cat implements ISetOperation {
-    public run(data: string[][]): string[] {
-        return _.concat(...data);
+export class Cat extends SetOperation implements IOperation {
+    public run(data: string[][]): Promise<string[]> {
+        return new Promise((resolve, reject) => resolve(_.concat(...data)));
     }
 }

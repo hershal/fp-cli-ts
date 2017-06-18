@@ -7,7 +7,6 @@ const verbose = require('debug')('Index:Verbose');
 const path = require('path');
 
 /* Node v8.1.2 does not support ES2015-style modules without --harmony. */
-const InputParser = require('../dist/InputParser.js').default;
 const Dispatcher = require('../dist/Dispatcher.js').default;
 
 let program = path.basename(process.argv[1], '.js');
@@ -19,20 +18,15 @@ if (program == 'index') {
   program = path.basename(process.argv[1], '.js');
 }
 
-debug(`Decoded program ${program}`)
+debug(`Decoded program ${program}`);
 
 const argv = process.argv.slice(2);
-const parser = new InputParser();
 
-debug('Parsing arguments...')
+debug('Parsing arguments...');
+debug(`Dispatching ${argv.length} input argument(s) to ${program}.`);
+verbose(`Got argv %O`, argv);
 
-parser.parse(argv).then((input) => {
-  debug('Parsing arguments... done.')
-  debug(`Dispatching ${input.length} input argument(s) to ${program}.`);
-
-  verbose(`Got input %O from argv %O`, input, argv);
-  const results = Dispatcher.execute(program, input);
-
+Dispatcher.execute(program, argv).then((results) => {
   if (results.error) {
     console.log(results.error);
     debug(`Error: %O`, results.error);
