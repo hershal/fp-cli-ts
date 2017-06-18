@@ -1,11 +1,11 @@
-import StreamSerializer from '../src/StreamSerializer';
+import { StreamSerializerComplete } from '../src/StreamSerializer';
 
 import * as chai from "chai";
 const expect = chai.expect;
 
 describe('Stream Serializer', function () {
     it('Seralizes a stream', function () {
-        const serializer = new StreamSerializer();
+        const serializer = new StreamSerializerComplete();
 
         serializer.serialize(new Buffer('hello'));
         serializer.serialize(new Buffer(' '));

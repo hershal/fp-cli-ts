@@ -24,7 +24,8 @@
     "watch:test": "nodemon -e '*' -w . -i dist -x 'npm run incremental || false'"
   },
   "dependencies": {
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "yargs": "^8.0.2"
   },
   "devDependencies": {
     "@types/chai": "^3.0.0",

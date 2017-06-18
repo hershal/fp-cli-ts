@@ -1,4 +1,4 @@
-import StreamSerializer from './StreamSerializer';
+import { StreamSerializerComplete } from './StreamSerializer';
 import * as fs from 'fs';
 
 import * as debugImport from 'debug';
@@ -7,12 +7,7 @@ import * as debugImport from 'debug';
 /* This parser is asynchronous because reading multiple files synchronously is
  * such a bore. As such, it returns an ES2015 Promise. */
 export class InputParserReadFilesOptionalStandardInput {
-    private serializer: StreamSerializer;
     private debug = debugImport('InputParserReadFilesOptionalStandardInput');
-
-    constructor() {
-        this.serializer = new StreamSerializer();
-    }
 
     public parse(files: string[]): Promise<string[][]> {
         /* TODO: I'm probably going to have to extract out logic here to support
@@ -43,7 +38,7 @@ export class InputParserReadFilesOptionalStandardInput {
 
         this.debug(`Process is a pipe. Reading from stdin and files.`);
         const stdin = new Promise((resolve, reject) => {
-            const serializer = new StreamSerializer();
+            const serializer = new StreamSerializerComplete();
 
             process.stdin.on('data', (data: Buffer) => {
                 this.debug(`Stdin sent chunk of size ${data.length}.`);

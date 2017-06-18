@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "debug": "registry:npm/debug#2.0.0+20170504163145",
-    "lodash": "registry:npm/lodash#4.0.0+20161015015725"
+    "lodash": "registry:npm/lodash#4.0.0+20161015015725",
+    "yargs": "registry:npm/yargs#5.0.0+20160907000723"
   }
 }
