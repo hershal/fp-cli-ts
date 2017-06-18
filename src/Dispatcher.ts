@@ -22,7 +22,7 @@ export default class Dispatcher {
     private static operationHash: {[key: string]: any} = {
         fcat: SetOperations.Cat,
         funion: SetOperations.Union,
-        fxor: SetOperations.XOR,
+        fxor: SetOperations.XOR
     };
 
 }
