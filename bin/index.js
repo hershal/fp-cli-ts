@@ -28,13 +28,9 @@ verbose(`Got argv %O`, argv);
 debug(`Dispatching ${argv.length} input argument(s) to ${program}.`);
 
 Dispatcher.dispatch(program, argv).then((results) => {
-  if (results.error) {
-    console.log(results.error);
-    debug(`Error: %O`, results.error);
-  } else {
-    debug(`Returning ${results.results.length} result(s) via stdout.`);
-    verbose(`%O`, results.results);
-    /* TODO: May have to extract this out. */
-    console.log(results.results.join('\n'));
-  }
+  debug(`Returning ${results.length} result(s) via stdout.`);
+  /* TODO: May have to extract this out. */
+  console.log(results.join('\n'));
+}).catch((err) => {
+  console.log(err);
 });
