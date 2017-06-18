@@ -23,8 +23,8 @@ export default class Dispatcher {
                 .parse(args)
                 .then((data) => operation.run(data))
                 .then((results) => resolve(results))
-                .catch((error) => reject(error))
-        })
+                .catch((error) => reject(error));
+        });
     }
 
     private static operationHash: {[key: string]: any} = {
