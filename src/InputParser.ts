@@ -32,6 +32,7 @@ export class InputParserReadFilesOptionalStandardInput {
             });
         });
 
+        /* XXX: Ew, this is grabbing internal implementation-detail guts. */
         const flowing = (process as any).stdin._readableState.flowing;
         const isTTY = process.stdin.isTTY;
 
