@@ -10,16 +10,6 @@ export class SetOperation {
         this.parser = new InputParserReadFilesOptionalStandardInput();
     }
 
-    protected _run(args: string[], operation: (data: string[][]) => string[]): Promise<string[]> {
-        return new Promise((resolve, reject) => {
-            this.parse(args).then((data) => {
-                resolve(operation(data));
-            }).catch((error) => {
-                reject(error);
-            });
-        });
-    }
-
     public parse(argv: string[]): Promise<string[][]> {
         return this.parser.parse(argv);
     }
