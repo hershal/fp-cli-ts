@@ -7,10 +7,9 @@ const expect = chai.expect;
 function checkOperation(operation: IOperation, input: string[][], expected: string[], callback: any) {
     operation
         .run(input)
-        .then((results) => {
-            expect(results).to.deep.equal(expected);
-            callback();
-        });
+        .then((results) => expect(results).to.deep.equal(expected))
+        .then(() => callback())
+        .catch(callback);
 }
 
 describe('Set Operations', function() {
