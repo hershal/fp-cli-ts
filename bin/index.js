@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 'use strict';
 
-const debug = require('debug')('Index');
-const verbose = require('debug')('Index:Verbose');
+const debug = require('../dist/Debug.js').default('Index');
+const verbose = require('../dist/Debug.js').default('Index:Verbose');
 
 const path = require('path');
 

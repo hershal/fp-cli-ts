@@ -1,17 +1,16 @@
 import { IOperation } from './Interfaces';
 import { StreamSerializerNewline } from './StreamSerializer';
+import Debug from './Debug';
 
-import * as debugImport from 'debug';
 import * as _ from 'lodash';
 import * as yargs from 'yargs';
 
 export class TextOperation {
-    private debug: any;
+    private debug = Debug('TextOperations');
     private serializer: StreamSerializerNewline;
 
     constructor() {
         this.serializer = new StreamSerializerNewline();
-        this.debug = debugImport('TextOperation');
     }
 
     public parse(args: string[]): ITextOperationOptions {

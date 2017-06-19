@@ -1,13 +1,13 @@
 import { StreamSerializerComplete } from './StreamSerializer';
 import * as fs from 'fs';
 
-import * as debugImport from 'debug';
+import Debug from './Debug';
 
 /* Argument Parser. */
 /* This parser is asynchronous because reading multiple files synchronously is
  * such a bore. As such, it returns an ES2015 Promise. */
 export class InputParserReadFilesOptionalStandardInput {
-    private debug = debugImport('InputParserReadFilesOptionalStandardInput');
+    private debug = Debug('InputParserReadFilesOptionalStandardInput');
 
     public parse(files: string[]): Promise<string[][]> {
         /* TODO: I'm probably going to have to extract out logic here to support
