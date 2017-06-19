@@ -1,6 +1,7 @@
 import Debug from './Debug';
 
 import * as SetOperations from './SetOperations';
+import * as TextOperations from './TextOperations';
 import { IOperation, IStreamingOperation, IDispatcher } from './Interfaces';
 import { StreamSerializerNewline } from './StreamSerializer';
 
@@ -31,9 +32,11 @@ class DispatcherStandardInputStream implements IDispatcher {
         return new Promise((resolve, reject) => {
             operation.parse(args);
 
+            console.log(operation);
+
             process.stdin.on('data', (data: Buffer) => {
                 this.debug(`Stdin sent chunk of size ${data.length}.`);
-                this.serializer.serialize(data, operation.run);
+                this.serializer.serialize(data, (data) => operation.run(data));
             });
 
             process.stdin.on('end', () => {
@@ -46,6 +49,7 @@ class DispatcherStandardInputStream implements IDispatcher {
 }
 
 
+/* instead of sending a promise, emit messages to the eventemitter! */
 export default class Dispatch {
     /* TODO: this is not fully generalized. E.g. I don't have arguments here... */
     public static dispatch(program: string, args: string[]): Promise<string[]> {
@@ -70,7 +74,7 @@ export default class Dispatch {
         fcat: {dispatcher: DispatcherLegacy, operation: SetOperations.Cat},
         funion: {dispatcher: DispatcherLegacy, operation: SetOperations.Union},
         fxor: {dispatcher: DispatcherLegacy, operation: SetOperations.XOR},
-        /* fsplit: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Split}, */
+        fsplit: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Split},
         /* fjoin: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Join} */
     };
 }

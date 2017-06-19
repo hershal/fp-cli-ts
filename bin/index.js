@@ -28,6 +28,11 @@ verbose(`Got argv %O`, argv);
 debug(`Dispatching ${argv.length} input argument(s) to ${program}.`);
 
 Dispatch.dispatch(program, argv).then((results) => {
+  if (!results) {
+    debug('No results returned. Successful exit.');
+    return;
+  }
+
   debug(`Returning ${results.length} result(s) via stdout.`);
   /* TODO: May have to extract this out. */
   console.log(results.join('\n'));

@@ -63,6 +63,7 @@
   "bin": {
     "fcat": "./bin/index.js",
     "funion": "./bin/index.js",
-    "fxor": "./bin/index.js"
+    "fxor": "./bin/index.js",
+    "fsplit": "./bin/index.js"
   }
 }

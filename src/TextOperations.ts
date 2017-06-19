@@ -1,4 +1,4 @@
-import { IOperation } from './Interfaces';
+import { IOperation, IStreamingOperation } from './Interfaces';
 import { StreamSerializerNewline } from './StreamSerializer';
 import Debug from './Debug';
 
@@ -7,7 +7,7 @@ import * as yargs from 'yargs';
 
 
 export class TextOperation {
-    protected options?: ITextOperationOptions;
+    protected options: ITextOperationOptions;
     private debug = Debug('TextOperation');
 
     public parse(args: string[]): ITextOperationOptions {
@@ -33,6 +33,12 @@ export class TextOperation {
                 type: 'array',
                 default: undefined
             })
+            .option('t', {
+                alias: 'trim',
+                describe: 'Trim the split strings',
+                type: 'boolean',
+                default: true
+            })
             .parse(args);
 
         this.debug(parser);
@@ -45,15 +51,17 @@ export class TextOperation {
             parser.o = parser.o.pop();
         }
 
-        return {
+        this.options = {
             inputDelimeterRegex: parser.i,
             outputDelimeter: parser.o,
             fields: _.split(parser.f, ',').map((s) => Number.parseInt(s))
         };
+
+        return this.options;
     }
 
-    public run(data: string, callback: (data: string) => void): void {
-
+    public run(data: string, callback: (data: string) => string): string {
+        return callback(data);
     }
 }
 
@@ -62,4 +70,23 @@ export interface ITextOperationOptions {
     inputDelimeterRegex: string;
     outputDelimeter: string;
     fields: number[];
+}
+
+
+export class Split extends TextOperation implements IStreamingOperation {
+    public run(data: string): string {
+        const inputDelim = this.options.inputDelimeterRegex;
+        const processed = _.split(data.replace(/\s+/g, ' ').trim(), inputDelim);
+
+        /* If you're asking for a specific field, then return that. */
+        if (this.options.fields.length > 0
+            && this.options.fields[0] !== undefined
+            && !isNaN(this.options.fields[0])) {
+            return _(this.options.fields).map((num) => processed[num]).join(this.options.outputDelimeter);
+        }
+        /* Otherwise return the entire string */
+        const ret = _.join(processed, this.options.outputDelimeter);
+        console.log(ret);
+        return ret;
+    }
 }
