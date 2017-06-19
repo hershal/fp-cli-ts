@@ -32,8 +32,6 @@ class DispatcherStandardInputStream implements IDispatcher {
         return new Promise((resolve, reject) => {
             operation.parse(args);
 
-            console.log(operation);
-
             process.stdin.on('data', (data: Buffer) => {
                 this.debug(`Stdin sent chunk of size ${data.length}.`);
                 this.serializer.serialize(data, (data) => operation.run(data));
@@ -41,7 +39,7 @@ class DispatcherStandardInputStream implements IDispatcher {
 
             process.stdin.on('end', () => {
                 this.debug(`Stdin ended.`);
-                this.serializer.flush(operation.run);
+                this.serializer.flush((data) => operation.run(data));
                 resolve();
             });
         });
