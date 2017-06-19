@@ -1,13 +1,13 @@
-import  Dispatcher from '../src/Dispatcher';
+import  Dispatch from '../src/Dispatcher';
 
 import * as chai from 'chai';
 const expect = chai.expect;
 
 import * as path from 'path';
 
-describe('Dispatcher', function () {
+describe('Dispatch', function () {
     it('Dispatches to fcat', function (done) {
-        Dispatcher
+        Dispatch
             .dispatch('fcat', ['one', 'two']
                       .map((f) => path.resolve(__dirname + '/fixtures/' + f)))
             .then((results) => expect(results).to.be.deep.equal(['1', '2', '2', '3']))

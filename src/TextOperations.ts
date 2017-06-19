@@ -7,8 +7,10 @@ import * as yargs from 'yargs';
 
 export class TextOperation {
     private debug = Debug('TextOperation');
+    private options?: ITextOperationOptions;
 
     public parse(args: string[]): ITextOperationOptions {
+        this.options = undefined;
         const parser = yargs
             .option('i', {
                 alias: 'input-delimiter',

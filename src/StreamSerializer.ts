@@ -30,7 +30,7 @@ export class StreamSerializerNewline {
         this.buffer = '';
     }
 
-    public serialize(rawData: Buffer, callback: (data: string) => void) {
+    public serialize(rawData: Buffer, callback: (data: string) => string) {
         const data = rawData.toString().split('\n');
 
         /* short-circuit */
