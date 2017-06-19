@@ -6,9 +6,13 @@ const expect = chai.expect;
 import * as path from 'path';
 
 describe('Dispatch', function () {
-    it('Dispatches to fcat', function (done) {
+    let dispatch: Dispatch;
 
-        const dispatch = new Dispatch();
+    beforeEach(function () {
+        dispatch = new Dispatch();
+    });
+
+    it('Dispatches to fcat', function (done) {
         dispatch
             .dispatch('fcat', ['one', 'two']
                       .map((f) => path.resolve(__dirname + '/fixtures/' + f)))
