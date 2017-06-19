@@ -6,12 +6,7 @@ import * as _ from 'lodash';
 import * as yargs from 'yargs';
 
 export class TextOperation {
-    private debug = Debug('TextOperations');
-    private serializer: StreamSerializerNewline;
-
-    constructor() {
-        this.serializer = new StreamSerializerNewline();
-    }
+    private debug = Debug('TextOperation');
 
     public parse(args: string[]): ITextOperationOptions {
         const parser = yargs
@@ -52,6 +47,10 @@ export class TextOperation {
             outputDelimeter: parser.o,
             fields: _.split(parser.f, ',').map((s) => Number.parseInt(s))
         };
+    }
+
+    public run(data: string, callback: (data: string) => void): void {
+
     }
 }
 
