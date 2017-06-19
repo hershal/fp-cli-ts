@@ -2,18 +2,23 @@ import Debug from './Debug';
 
 import * as SetOperations from './SetOperations';
 import * as TextOperations from './TextOperations';
-import { IOperation, IStreamingOperation, IDispatcher } from './Interfaces';
+import { IOperation, IStreamingOperation, IDispatcher, IDispatchDelegate } from './Interfaces';
 import { StreamSerializerNewline } from './StreamSerializer';
 
 
 class DispatcherLegacy implements IDispatcher {
-    public dispatch(operation: IOperation, args: string[]): Promise<any> {
+    public delegate?: IDispatchDelegate;
 
+    constructor(delegate: IDispatchDelegate) {
+        this.delegate = delegate;
+    }
+
+    public dispatch(operation: IOperation, args: string[]): Promise<string[]> {
         return new Promise((resolve, reject) => {
             operation
                 .parse(args)
                 .then((data) => operation.run(data))
-                .then((results) => resolve(results))
+                .then((results) => { if (this.delegate) { this.delegate.didFinish(results); } resolve(results); })
                 .catch((error) => reject(error));
         });
     }
@@ -21,36 +26,67 @@ class DispatcherLegacy implements IDispatcher {
 
 
 class DispatcherStandardInputStream implements IDispatcher {
+    public delegate: IDispatchDelegate;
     private serializer: StreamSerializerNewline;
     private debug = Debug('DispatcherStandardInputStream');
 
-    constructor() {
+    /* This buffer is only used if we don't have a delegate. */
+    private buffer: string[];
+
+    constructor(delegate: IDispatchDelegate) {
+        this.delegate = delegate;
         this.serializer = new StreamSerializerNewline();
+        this.buffer = []
     }
 
-    public dispatch(operation: IStreamingOperation, args: string[]): Promise<any> {
+    public dispatch(operation: IStreamingOperation, args: string[]): Promise<string[]> {
         return new Promise((resolve, reject) => {
             operation.parse(args);
 
+            const callback = (serialized: string): string => {
+                const processed = operation.run(serialized);
+                if (!this.delegate) {
+                    this.buffer.push(processed);
+                } else {
+                    this.buffer.forEach((l) => this.delegate.didFinishLine(l));
+                    this.delegate.didFinishLine(processed);
+                    this.buffer = [];
+                }
+                return processed;
+            };
+
             process.stdin.on('data', (data: Buffer) => {
                 this.debug(`Stdin sent chunk of size ${data.length}.`);
-                this.serializer.serialize(data, (data) => operation.run(data));
+                this.serializer.serialize(data, (serialized) => callback(serialized));
             });
 
             process.stdin.on('end', () => {
                 this.debug(`Stdin ended.`);
-                this.serializer.flush((data) => operation.run(data));
-                resolve();
+                this.serializer.flush((data) => callback(data));
+                resolve(this.buffer);
+                this.buffer = [];
             });
         });
     }
 }
 
 
-/* instead of sending a promise, emit messages to the eventemitter! */
 export default class Dispatch {
-    /* TODO: this is not fully generalized. E.g. I don't have arguments here... */
-    public static dispatch(program: string, args: string[]): Promise<string[]> {
+    private static operationHash: {[key: string]: IOperationHashItem } = {
+        fcat: {dispatcher: DispatcherLegacy, operation: SetOperations.Cat},
+        funion: {dispatcher: DispatcherLegacy, operation: SetOperations.Union},
+        fxor: {dispatcher: DispatcherLegacy, operation: SetOperations.XOR},
+        fsplit: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Split},
+        /* fjoin: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Join} */
+    };
+
+    public delegate?: IDispatchDelegate;
+
+    constructor(delegate?: IDispatchDelegate) {
+        this.delegate = delegate;
+    }
+
+    public dispatch(program: string, args: string[]): Promise<string[]> {
         const operationSelector = Dispatch.operationHash[program];
 
         /* Short-circuit */
@@ -63,23 +99,27 @@ export default class Dispatch {
         }
 
         const operation: IOperation = new operationSelector.operation();
-        const dispatcher: IDispatcher = new operationSelector.dispatcher();
+        const dispatcher: IDispatcher = new operationSelector.dispatcher(this.delegate);
 
         return dispatcher.dispatch(operation, args);
     }
-
-    private static operationHash: {[key: string]: IOperationHashItem } = {
-        fcat: {dispatcher: DispatcherLegacy, operation: SetOperations.Cat},
-        funion: {dispatcher: DispatcherLegacy, operation: SetOperations.Union},
-        fxor: {dispatcher: DispatcherLegacy, operation: SetOperations.XOR},
-        fsplit: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Split},
-        /* fjoin: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Join} */
-    };
 }
+
 
 interface IOperationHashItem {
      /* HACK: I couldn't get the type system to let me use IDispatcher here.
       * This is a shitty workaround. */
     dispatcher: any;
     operation: any;
+}
+
+
+class DispatchDelegateConsoleLog implements IDispatchDelegate {
+    public didFinishLine(line: string) {
+        console.log(line);
+    }
+
+    public didFinish(results: string[]) {
+        results.forEach((line) => console.log(line));
+    }
 }

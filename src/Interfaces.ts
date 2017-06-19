@@ -17,6 +17,13 @@ export interface IError {
 }
 
 
+export interface IDispatchDelegate {
+    didFinishLine(line: string): void;
+    didFinish(results: string[]): void;
+}
+
+
 export interface IDispatcher {
+    delegate?: IDispatchDelegate;
     dispatch(operation: any, args: string[]): Promise<any>;
 }

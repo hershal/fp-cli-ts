@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* Node v8.1.2 does not support ES2015-style modules without --harmony. */
 'use strict';
 
 const debug = require('../dist/Debug.js').default('Index');
@@ -6,12 +7,12 @@ const verbose = require('../dist/Debug.js').default('Index:Verbose');
 
 const path = require('path');
 
-/* Node v8.1.2 does not support ES2015-style modules without --harmony. */
 const Dispatch = require('../dist/Dispatcher.js').default;
 
 let program = path.basename(process.argv[1], '.js');
 
 debug('Starting up');
+const dispatch = new Dispatch();
 
 if (program == 'index') {
   process.argv.shift();
@@ -27,7 +28,7 @@ verbose(`Got argv %O`, argv);
 
 debug(`Dispatching ${argv.length} input argument(s) to ${program}.`);
 
-Dispatch.dispatch(program, argv).then((results) => {
+dispatch.dispatch(program, argv).then((results) => {
   if (!results) {
     debug('No results returned. Successful exit.');
     return;
