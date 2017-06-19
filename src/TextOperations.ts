@@ -15,27 +15,27 @@ export class TextOperation {
         const parser = yargs
             .option('i', {
                 alias: 'input-delimiter',
-                describe: 'Input delimiter regex',
+                describe: 'The input delimiter regex.',
                 nargs: 1,
                 type: 'string',
                 default: ' '
             })
             .option('o', {
                 alias: 'output-delimiter',
-                describe: 'Output delimiter string',
+                describe: 'The output delimiter string.',
                 nargs: 1,
                 type: 'string',
                 default: '\n'
             })
             .option('f', {
                 alias: 'fields',
-                describe: 'Fields number(s) to extract',
+                describe: 'Fields number(s) to extract, zero-indexed.',
                 type: 'array',
                 default: undefined
             })
             .option('t', {
                 alias: 'trim',
-                describe: 'Trim the split strings',
+                describe: 'Trim the split strings.',
                 type: 'boolean',
                 default: true
             })
