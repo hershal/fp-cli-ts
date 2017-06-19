@@ -5,9 +5,10 @@ import Debug from './Debug';
 import * as _ from 'lodash';
 import * as yargs from 'yargs';
 
+
 export class TextOperation {
+    protected options?: ITextOperationOptions;
     private debug = Debug('TextOperation');
-    private options?: ITextOperationOptions;
 
     public parse(args: string[]): ITextOperationOptions {
         this.options = undefined;
