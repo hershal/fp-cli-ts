@@ -18,7 +18,7 @@
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
     "build": "npm run clean && npm run lint && echo Using TypeScript && tsc --version && tsc --pretty",
     "test": "mocha --compilers ts:ts-node/register --recursive 'test/**/*Spec.ts'",
-    "coverage": "nyc --include='src/**/*.ts' --reporter=text --reporter=html --reporter=lcov mocha --compilers ts:ts-node/register --recursive 'test/**/*.test.ts'",
+    "coverage": "nyc --include='src/**/*.ts' --reporter=text --reporter=html --reporter=lcov mocha --compilers ts:ts-node/register --recursive 'test/**/*Spec.ts'",
     "watch": "npm run build -- --watch",
     "incremental": "npm run lint && tsc --pretty && npm run test",
     "watch:test": "nodemon -e '*' -w . -i dist -x 'npm run incremental || false'"
