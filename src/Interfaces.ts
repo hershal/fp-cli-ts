@@ -18,8 +18,13 @@ export interface IError {
 
 
 export interface IDispatchDelegate {
-    didFinishLine(line: string): void;
-    didFinish(results: string[]): void;
+    /* Called when a line is processed, given by `processedLine`. */
+    didFinishLine(processedLine: string): void;
+
+    /* Called when all input is done processing. If there is still processed
+     * data held in internal buffers, they are flushed to the delegate in
+     * `remainingProcessedResults`. */
+    didFinish(remainingProcessedResults: string[]): void;
 }
 
 

@@ -83,13 +83,9 @@ export class Split extends TextOperation implements IStreamingOperation {
             && this.options.fields[0] !== undefined
             && !isNaN(this.options.fields[0])) {
 
-            const ret = _(this.options.fields).map((num) => processed[num]).join(this.options.outputDelimeter);
-            console.log(ret);
-            return ret;
+            return _(this.options.fields).map((num) => processed[num]).join(this.options.outputDelimeter);
         }
         /* Otherwise return the entire string */
-        const ret = _.join(processed, this.options.outputDelimeter);
-        console.log(ret);
-        return ret;
+        return _.join(processed, this.options.outputDelimeter);
     }
 }
