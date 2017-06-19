@@ -7,7 +7,7 @@ const verbose = require('../dist/Debug.js').default('Index:Verbose');
 const path = require('path');
 
 /* Node v8.1.2 does not support ES2015-style modules without --harmony. */
-const Dispatcher = require('../dist/Dispatcher.js').default;
+const Dispatch = require('../dist/Dispatcher.js').default;
 
 let program = path.basename(process.argv[1], '.js');
 
@@ -27,7 +27,7 @@ verbose(`Got argv %O`, argv);
 
 debug(`Dispatching ${argv.length} input argument(s) to ${program}.`);
 
-Dispatcher.dispatch(program, argv).then((results) => {
+Dispatch.dispatch(program, argv).then((results) => {
   debug(`Returning ${results.length} result(s) via stdout.`);
   /* TODO: May have to extract this out. */
   console.log(results.join('\n'));

@@ -38,7 +38,7 @@ class DispatcherStandardInputStream implements IDispatcher {
 
             process.stdin.on('end', () => {
                 this.debug(`Stdin ended.`);
-                this.serializer.flush(operation.run)
+                this.serializer.flush(operation.run);
                 resolve();
             });
         });
@@ -66,7 +66,7 @@ export default class Dispatch {
         return dispatcher.dispatch(operation, args);
     }
 
-    private static operationHash: {[key: string]: OperationHashItem } = {
+    private static operationHash: {[key: string]: IOperationHashItem } = {
         fcat: {dispatcher: DispatcherLegacy, operation: SetOperations.Cat},
         funion: {dispatcher: DispatcherLegacy, operation: SetOperations.Union},
         fxor: {dispatcher: DispatcherLegacy, operation: SetOperations.XOR},
@@ -75,7 +75,7 @@ export default class Dispatch {
     };
 }
 
-interface OperationHashItem {
+interface IOperationHashItem {
      /* HACK: I couldn't get the type system to let me use IDispatcher here.
       * This is a shitty workaround. */
     dispatcher: any;

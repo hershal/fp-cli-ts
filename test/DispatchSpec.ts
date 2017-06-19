@@ -13,5 +13,5 @@ describe('Dispatch', function () {
             .then((results) => expect(results).to.be.deep.equal(['1', '2', '2', '3']))
             .then(() => done())
             .catch(done);
-    })
-})
+    });
+});
