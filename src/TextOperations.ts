@@ -76,13 +76,16 @@ export interface ITextOperationOptions {
 export class Split extends TextOperation implements IStreamingOperation {
     public run(data: string): string {
         const inputDelim = this.options.inputDelimeterRegex;
-        const processed = _.split(data.replace(/\s+/g, ' ').trim(), inputDelim);
+        const processed = _.split(data.replace(/\s+/g, ' ').trim(), new RegExp(inputDelim));
 
         /* If you're asking for a specific field, then return that. */
         if (this.options.fields.length > 0
             && this.options.fields[0] !== undefined
             && !isNaN(this.options.fields[0])) {
-            return _(this.options.fields).map((num) => processed[num]).join(this.options.outputDelimeter);
+
+            const ret = _(this.options.fields).map((num) => processed[num]).join(this.options.outputDelimeter);
+            console.log(ret);
+            return ret;
         }
         /* Otherwise return the entire string */
         const ret = _.join(processed, this.options.outputDelimeter);
