@@ -31,32 +31,39 @@ export class InputParserReadFilesOptionalStandardInput {
         const flowing = (process as any).stdin._readableState.flowing;
         const isTTY = process.stdin.isTTY;
 
+        let promises = [];
+
         if (isTTY || !flowing) {
             this.debug(`Process is an interactive TTY or is not flowing. Reading files.`);
-            return Promise.all(readFilePromises);
+            promises = readFilePromises;
+        } else {
+            this.debug(`Process is a pipe. Reading from stdin and files.`);
+            const stdin = new Promise((resolve, reject) => {
+                this.setupStandardInputStream(resolve, reject);
+            });
+            promises = [stdin, ...readFilePromises];
         }
 
-        this.debug(`Process is a pipe. Reading from stdin and files.`);
-        const stdin = new Promise((resolve, reject) => {
-            const serializer = new StreamSerializerComplete();
+        return Promise.all(promises);
+    }
 
-            process.stdin.on('data', (data: Buffer) => {
-                this.debug(`Stdin sent chunk of size ${data.length}.`);
-                serializer.serialize(data);
-            });
+    private setupStandardInputStream(resolve: any, reject: any) {
+        const serializer = new StreamSerializerComplete();
 
-            process.stdin.on('close', () => {
-                this.debug(`Stdin closed.`);
-            });
-
-            process.stdin.on('end', () => {
-                this.debug(`Stdin ended.`);
-                const returnString = serializer.flush().toString().split('\n');
-                this.debug(`Serialized chunks. Total size ${returnString.length}.`);
-                resolve(returnString);
-            });
+        process.stdin.on('data', (data: Buffer) => {
+            this.debug(`Stdin sent chunk of size ${data.length}.`);
+            serializer.serialize(data);
         });
 
-        return Promise.all([stdin, ...readFilePromises]);
+        process.stdin.on('close', () => {
+            this.debug(`Stdin closed.`);
+        });
+
+        process.stdin.on('end', () => {
+            this.debug(`Stdin ended.`);
+            const returnString = serializer.flush().toString().split('\n');
+            this.debug(`Serialized chunks. Total size ${returnString.length}.`);
+            resolve(returnString);
+        });
     }
 }
