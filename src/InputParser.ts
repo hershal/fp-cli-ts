@@ -14,6 +14,7 @@ export class InputParserReadFilesOptionalStandardInput {
          * more complex transformations. */
         const readFilePromises = files.map((f) => {
             return new Promise<string[]>((resolve, reject) => {
+                this.debug(`Reading file: ${f}...`);
                 fs.readFile(f, (error: any, data: Buffer) => {
                     if (error) { reject(error); return; }
 
@@ -22,6 +23,7 @@ export class InputParserReadFilesOptionalStandardInput {
                         .split('\n')
                         .filter((s: string) => s.length > 0);
 
+                    this.debug(`Reading file: ${f}... done.`);
                     resolve(formattedData);
                 });
             });
