@@ -86,6 +86,7 @@ class DispatcherStandardInputStream implements IDispatcher {
 export default class Dispatch {
     private static operationHash: {[key: string]: IOperationHashItem } = {
         fcat: {dispatcher: DispatcherLegacy, operation: SetOperations.Cat},
+        fdiff: {dispatcher: DispatcherLegacy, operation: SetOperations.Difference},
         funion: {dispatcher: DispatcherLegacy, operation: SetOperations.Union},
         fxor: {dispatcher: DispatcherLegacy, operation: SetOperations.XOR},
         fsplit: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Split},

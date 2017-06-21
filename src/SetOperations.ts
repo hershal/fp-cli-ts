@@ -36,3 +36,10 @@ export class Cat extends SetOperation implements IOperation {
         return new Promise((resolve, reject) => resolve(_.concat(...data)));
     }
 }
+
+/* Computes the difference between the first list and the remaining lists. */
+export class Difference extends SetOperation implements IOperation {
+    public run(data: string[][]): Promise<string[]> {
+        return new Promise((resolve, reject) => resolve(_.difference(data.shift(), ...data)));
+    }
+}
