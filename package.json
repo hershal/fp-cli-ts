@@ -61,6 +61,7 @@
     "all": true
   },
   "bin": {
+    "f": "./bin/index.js",
     "fcat": "./bin/index.js",
     "funion": "./bin/index.js",
     "fxor": "./bin/index.js",

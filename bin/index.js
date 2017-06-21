@@ -14,7 +14,7 @@ let program = path.basename(process.argv[1], '.js');
 debug('Starting up');
 const dispatch = new Dispatch();
 
-if (program == 'index') {
+if (program == 'index' || program == 'f') {
   process.argv.shift();
   program = path.basename(process.argv[1], '.js');
 }
