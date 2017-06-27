@@ -15,7 +15,7 @@ export class TextOperation {
         const parser = yargs
             .option('i', {
                 alias: 'input-delimiter',
-                describe: 'The input delimiter regex.',
+                describe: 'The per-line input delimiter regex.',
                 nargs: 1,
                 type: 'string',
                 default: ' '
