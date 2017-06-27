@@ -51,6 +51,7 @@ class DispatcherStandardInputStream implements IDispatcher {
             operation.parse(args);
 
             const callback = (serialized: string): string => {
+                this.debug(`Stdin serializer callback called on string of length ${serialized.length}.`);
                 const processed = operation.run(serialized);
                 if (!this.delegate) {
                     this.buffer.push(processed);
