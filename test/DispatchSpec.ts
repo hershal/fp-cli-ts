@@ -12,9 +12,9 @@ describe('Dispatch', function () {
         dispatch = new Dispatch();
     });
 
-    it('Dispatches to fcat', function (done) {
+    it('Dispatches to Cat', function (done) {
         dispatch
-            .dispatch('fcat', ['one', 'two']
+            .dispatch('cat', ['one', 'two']
                       .map((f) => path.resolve(__dirname + '/fixtures/' + f)))
             .then((results) => expect(results).to.be.deep.equal(['1', '2', '2', '3']))
             .then(() => done())
