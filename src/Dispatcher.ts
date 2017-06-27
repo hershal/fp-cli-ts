@@ -86,13 +86,13 @@ class DispatcherStandardInputStream implements IDispatcher {
 
 export default class Dispatch {
     private static operationHash: {[key: string]: IOperationHashItem } = {
-        fcat: {dispatcher: DispatcherLegacy, operation: SetOperations.Cat},
-        fdiff: {dispatcher: DispatcherLegacy, operation: SetOperations.Difference},
-        funion: {dispatcher: DispatcherLegacy, operation: SetOperations.Union},
-        fxor: {dispatcher: DispatcherLegacy, operation: SetOperations.XOR},
-        fsplit: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Split},
-        ftrim: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Trim},
-        /* fjoin: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Join} */
+        cat: {dispatcher: DispatcherLegacy, operation: SetOperations.Cat},
+        diff: {dispatcher: DispatcherLegacy, operation: SetOperations.Difference},
+        union: {dispatcher: DispatcherLegacy, operation: SetOperations.Union},
+        xor: {dispatcher: DispatcherLegacy, operation: SetOperations.XOR},
+        split: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Split},
+        trim: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Trim},
+        /* join: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Join} */
     };
 
     public delegate?: IDispatchDelegate;
