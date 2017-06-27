@@ -90,6 +90,7 @@ export default class Dispatch {
         funion: {dispatcher: DispatcherLegacy, operation: SetOperations.Union},
         fxor: {dispatcher: DispatcherLegacy, operation: SetOperations.XOR},
         fsplit: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Split},
+        ftrim: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Trim},
         /* fjoin: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Join} */
     };
 

@@ -89,3 +89,10 @@ export class Split extends TextOperation implements IStreamingOperation {
         return _.join(processed, this.options.outputDelimeter);
     }
 }
+
+
+export class Trim extends TextOperation implements IStreamingOperation {
+    public run(data: string): string {
+        return _.trim(data);
+    }
+}
