@@ -22,16 +22,21 @@ export class StreamSerializerComplete {
 }
 
 
-export class StreamSerializerNewline {
+export class StreamSerializer {
+    /* String that triggers the generation of chunks. */
+    public chunkString: string;
+
+    /* Holds data left over from any previous data chunk. */
     private buffer: string;
 
-    constructor() {
-        /* data left over from any previous data chunk */
+    constructor(chunkString: string) {
         this.buffer = '';
+
+        this.chunkString = chunkString;
     }
 
     public serialize(rawData: Buffer, callback: (data: string) => string) {
-        const data = rawData.toString().split('\n');
+        const data = rawData.toString().split(this.chunkString);
 
         /* short-circuit */
         if (data.length === 0) {
@@ -50,11 +55,18 @@ export class StreamSerializerNewline {
     }
 
     public flush(callback: (data: string) => void) {
-        if (this.buffer.length === 0 || this.buffer.indexOf('\n') === 0) {
+        if (this.buffer.length === 0 || this.buffer.indexOf(this.chunkString) === 0) {
             /* do nothing */
             return;
         }
         callback(this.buffer);
         this.buffer = '';
+    }
+}
+
+
+export class StreamSerializerNewline extends StreamSerializer {
+    constructor() {
+        super('\n');
     }
 }
