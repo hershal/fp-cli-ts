@@ -24,6 +24,7 @@
     "watch:test": "nodemon -e '*' -w . -i dist -x 'npm run incremental || false'"
   },
   "dependencies": {
+    "has-flag": "^2.0.0",
     "lodash": "^4.17.4",
     "yargs": "^8.0.2"
   },
@@ -37,9 +38,9 @@
     "nodemon": "^1.11.0",
     "nyc": "^10.0.0",
     "rimraf": "^2.0.0",
-    "ts-node": "^3.0.0",
+    "ts-node": "^3.1.0",
     "tslint": "^5.0.0",
-    "typescript": "^2.0.0"
+    "typescript": "^2.4.1"
   },
   "engines": {
     "node": ">=6.0.0"

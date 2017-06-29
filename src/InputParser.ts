@@ -40,7 +40,9 @@ export class InputParserReadFilesOptionalStandardInput {
             promises = readFilePromises;
         } else {
             this.debug(`Process is a pipe. Reading from stdin and files.`);
-            const stdin = new Promise((resolve, reject) => {
+            const stdin = new Promise<string[]>
+                ((resolve: (serialized: string[]) => void,
+                  reject: (error: string) => void) => {
                 this.setupStandardInputStream(resolve, reject);
             });
             promises = [stdin, ...readFilePromises];
@@ -49,7 +51,7 @@ export class InputParserReadFilesOptionalStandardInput {
         return Promise.all(promises);
     }
 
-    private setupStandardInputStream(resolve: any, reject: any) {
+    private setupStandardInputStream(resolve: (serialized: string[]) => void, reject: any) {
         const serializer = new StreamSerializerComplete();
 
         process.stdin.on('data', (data: Buffer) => {
