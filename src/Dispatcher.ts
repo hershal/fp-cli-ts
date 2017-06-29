@@ -2,17 +2,17 @@ import Debug from './Debug';
 
 import * as SetOperations from './SetOperations';
 import * as TextOperations from './TextOperations';
-import { IOperation, IStreamingOperation, IDispatcher, IDispatchDelegate } from './Interfaces';
+import { IOperation, IStreamingOperation, IDispatcher, IStreamDelegate } from './Interfaces';
 import { StreamSerializerNewline } from './StreamSerializer';
 
 
-/* Legacy Dispatcher. */
+/* Synchronous Standard Input Dispatcher. */
 /* Synchronously processes stdin in its entirety. */
-class DispatcherLegacy implements IDispatcher {
-    public delegate?: IDispatchDelegate;
+class DispatcherStandardInputSync implements IDispatcher {
+    public outputStreamDelegate?: IStreamDelegate;
 
-    constructor(delegate?: IDispatchDelegate) {
-        this.delegate = delegate;
+    constructor(delegate?: IStreamDelegate) {
+        this.outputStreamDelegate = delegate;
     }
 
     public dispatch(operation: IOperation, args: string[]): Promise<string[]> {
@@ -20,28 +20,33 @@ class DispatcherLegacy implements IDispatcher {
             operation
                 .parse(args)
                 .then((data) => operation.run(data))
-                .then((results) => { if (this.delegate) { this.delegate.didFinish(results); } resolve(results); })
+                .then((results) => {
+                    if (this.outputStreamDelegate) {
+                        this.outputStreamDelegate.streamDidFinish(results);
+                    }
+                    resolve(results);
+                })
                 .catch((error) => reject(error));
         });
     }
 }
 
 
-/* Standard Input Stream Dispatcher. */
+/* Asynchronous Standard Input Stream Dispatcher. */
 /* Asyncronously processes stdin as a stream serialized by line. */
 /* If you don't provide a delegate, then the Dispatcher will accumulate output
  * in a buffer until stdin is closed and return the buffer in a Promise.
  * Otherwise, the Dispatcher publishes the output to the delegate. */
 class DispatcherStandardInputStream implements IDispatcher {
-    public delegate?: IDispatchDelegate;
+    public outputStreamDelegate?: IStreamDelegate;
     private serializer: StreamSerializerNewline;
     private debug = Debug('DispatcherStandardInputStream');
 
     /* This buffer is only used if we don't have a delegate. */
     private buffer: string[];
 
-    constructor(delegate?: IDispatchDelegate) {
-        this.delegate = delegate;
+    constructor(delegate?: IStreamDelegate) {
+        this.outputStreamDelegate = delegate;
         this.serializer = new StreamSerializerNewline();
         this.buffer = [];
     }
@@ -53,11 +58,11 @@ class DispatcherStandardInputStream implements IDispatcher {
             const callback = (serialized: string): string => {
                 this.debug(`Stdin serializer callback called on string of length ${serialized.length}.`);
                 const processed = operation.run(serialized);
-                if (!this.delegate) {
+                if (!this.outputStreamDelegate) {
                     this.buffer.push(processed);
                 } else {
-                    this.buffer.forEach((l) => this.delegate.didFinishLine(l));
-                    this.delegate.didFinishLine(processed);
+                    this.buffer.forEach((l) => this.outputStreamDelegate.streamDidFinishLine(l));
+                    this.outputStreamDelegate.streamDidFinishLine(processed);
                     this.buffer = [];
                 }
                 return processed;
@@ -72,8 +77,8 @@ class DispatcherStandardInputStream implements IDispatcher {
                 this.debug(`Stdin ended.`);
                 this.serializer.flush((data) => callback(data));
 
-                if (this.delegate) {
-                    this.delegate.didFinish([]);
+                if (this.outputStreamDelegate) {
+                    this.outputStreamDelegate.streamDidFinish([]);
                 }
 
                 resolve(this.buffer);
@@ -86,19 +91,19 @@ class DispatcherStandardInputStream implements IDispatcher {
 
 export default class Dispatch {
     private static operationHash: {[key: string]: IOperationHashItem } = {
-        cat: {dispatcher: DispatcherLegacy, operation: SetOperations.Cat},
-        diff: {dispatcher: DispatcherLegacy, operation: SetOperations.Difference},
-        union: {dispatcher: DispatcherLegacy, operation: SetOperations.Union},
-        xor: {dispatcher: DispatcherLegacy, operation: SetOperations.XOR},
+        cat: {dispatcher: DispatcherStandardInputSync, operation: SetOperations.Cat},
+        diff: {dispatcher: DispatcherStandardInputSync, operation: SetOperations.Difference},
+        union: {dispatcher: DispatcherStandardInputSync, operation: SetOperations.Union},
+        xor: {dispatcher: DispatcherStandardInputSync, operation: SetOperations.XOR},
         split: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Split},
         trim: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Trim},
-        /* join: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Join} */
+        /* join: {dispIInputStreamDelegaterStandardInputStream, operation: TextOperations.Join} */
     };
 
-    public delegate?: IDispatchDelegate;
+    public streamDelegate?: IStreamDelegate;
 
-    constructor(delegate?: IDispatchDelegate) {
-        this.delegate = delegate;
+    constructor(delegate?: IStreamDelegate) {
+        this.streamDelegate = delegate;
     }
 
     public dispatch(program: string, args: string[]): Promise<string[]> {
@@ -114,7 +119,7 @@ export default class Dispatch {
         }
 
         const operation: IOperation = new operationSelector.operation();
-        const dispatcher: IDispatcher = new operationSelector.dispatcher(this.delegate);
+        const dispatcher: IDispatcher = new operationSelector.dispatcher(this.streamDelegate);
 
         return dispatcher.dispatch(operation, args);
     }
@@ -129,13 +134,13 @@ interface IOperationHashItem {
 }
 
 
-export class DispatchDelegateConsoleLog implements IDispatchDelegate {
-    public didFinishLine(line: string) {
+export class DispatchDelegateConsoleLog implements IStreamDelegate {
+    public streamDidFinishLine(line: string) {
         /* tslint:disable-next-line */
         console.log(line);
     }
 
-    public didFinish(results: string[]) {
+    public streamDidFinish(results: string[]) {
         /* tslint:disable-next-line */
         results.forEach((line) => console.log(line));
     }
