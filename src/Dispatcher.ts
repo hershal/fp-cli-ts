@@ -22,7 +22,7 @@ class DispatcherStandardInputSync implements IDispatcher {
                 .then((data) => operation.run(data))
                 .then((results) => {
                     if (this.outputStreamDelegate) {
-                        this.outputStreamDelegate.streamDidFinish(results);
+                        this.outputStreamDelegate.streamDidEnd(results);
                     }
                     resolve(results);
                 })
@@ -61,8 +61,8 @@ class DispatcherStandardInputStream implements IDispatcher {
                 if (!this.outputStreamDelegate) {
                     this.buffer.push(processed);
                 } else {
-                    this.buffer.forEach((l) => this.outputStreamDelegate.streamDidFinishLine(l));
-                    this.outputStreamDelegate.streamDidFinishLine(processed);
+                    this.buffer.forEach((l) => this.outputStreamDelegate.streamDidReceiveChunk(l));
+                    this.outputStreamDelegate.streamDidReceiveChunk(processed);
                     this.buffer = [];
                 }
                 return processed;
@@ -78,7 +78,7 @@ class DispatcherStandardInputStream implements IDispatcher {
                 this.serializer.flush((data) => callback(data));
 
                 if (this.outputStreamDelegate) {
-                    this.outputStreamDelegate.streamDidFinish([]);
+                    this.outputStreamDelegate.streamDidEnd([]);
                 }
 
                 resolve(this.buffer);
@@ -135,12 +135,12 @@ interface IOperationHashItem {
 
 
 export class DispatchDelegateConsoleLog implements IStreamDelegate {
-    public streamDidFinishLine(line: string) {
+    public streamDidReceiveChunk(line: string) {
         /* tslint:disable-next-line */
         console.log(line);
     }
 
-    public streamDidFinish(results: string[]) {
+    public streamDidEnd(results: string[]) {
         /* tslint:disable-next-line */
         results.forEach((line) => console.log(line));
     }

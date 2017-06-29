@@ -18,13 +18,13 @@ export interface IError {
 
 
 export interface IStreamDelegate {
-    /* Called when a line is processed, given by `processedLine`. */
-    streamDidFinishLine(processedLine: string): void;
+    /* Called with a chunk when the chunk is received and serialized. */
+    streamDidReceiveChunk(chunk: string): void;
 
     /* Called when all input is done processing. If there is still processed
      * data held in internal buffers, they are flushed to the delegate in
      * `remainingProcessedResults`. */
-    streamDidFinish(remainingProcessedResults: string[]): void;
+    streamDidEnd(remainingProcessedResults: string[]): void;
 }
 
 
