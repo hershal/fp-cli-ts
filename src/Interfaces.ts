@@ -24,11 +24,11 @@ export interface IStreamDelegate {
     /* Called when all input is done processing. If there is still processed
      * data held in internal buffers, they are flushed to the delegate in
      * `remainingProcessedResults`. */
-    streamDidEnd(remainingProcessedResults: string[]): void;
+    streamDidEnd(): void;
 }
 
 
-export interface IStandardInputStreamHandlerDelegate extends IStreamDelegate {
+export interface IStreamHandlerDelegate extends IStreamDelegate {
     stdinStreamSerializeCharacter(): string;
 }
 

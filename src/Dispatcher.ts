@@ -22,7 +22,9 @@ class DispatcherStandardInputSync implements IDispatcher {
                 .then((data) => operation.run(data))
                 .then((results) => {
                     if (this.outputStreamDelegate) {
-                        this.outputStreamDelegate.streamDidEnd(results);
+                        results.forEach((chunk: string) =>
+                            this.outputStreamDelegate.streamDidReceiveChunk(chunk));
+                        this.outputStreamDelegate.streamDidEnd();
                     }
                     resolve(results);
                 })
@@ -78,7 +80,7 @@ class DispatcherStandardInputStream implements IDispatcher {
                 this.serializer.flush((data) => callback(data));
 
                 if (this.outputStreamDelegate) {
-                    this.outputStreamDelegate.streamDidEnd([]);
+                    this.outputStreamDelegate.streamDidEnd();
                 }
 
                 resolve(this.buffer);
@@ -140,8 +142,7 @@ export class DispatchDelegateConsoleLog implements IStreamDelegate {
         console.log(line);
     }
 
-    public streamDidEnd(results: string[]) {
-        /* tslint:disable-next-line */
-        results.forEach((line) => console.log(line));
+    public streamDidEnd() {
+        /* nothing to do here */
     }
 }
