@@ -18,7 +18,7 @@ class BasicStreamHandlerDelegate implements IStreamHandlerDelegate {
     }
 
     /* Delegate methods */
-    public streamChunkTrigger(): string {
+    public streamChunkTriggerString(): string {
         return this.streamSerializationString;
     }
 
@@ -39,7 +39,6 @@ describe('Stream Handler', function () {
             handler = new StandardInputStreamHandler();
             handlerDelegate = new BasicStreamHandlerDelegate();
             handler.delegate = handlerDelegate;
-            handler.delegate
             stdin = stdio().stdin;
         });
 

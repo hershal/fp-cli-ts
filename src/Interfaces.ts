@@ -30,7 +30,7 @@ export interface IStreamDelegate {
 
 export interface IStreamHandlerDelegate extends IStreamDelegate {
     /*  Defines the chunk creation trigger. */
-    streamChunkTrigger(): string;
+    streamChunkTriggerString(): string;
 }
 
 
