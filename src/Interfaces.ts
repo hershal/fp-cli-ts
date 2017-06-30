@@ -28,6 +28,11 @@ export interface IStreamDelegate {
 }
 
 
+export interface IStandardInputStreamHandlerDelegate extends IStreamDelegate {
+    stdinStreamSerializeCharacter(): string;
+}
+
+
 export interface IDispatcher {
     outputStreamDelegate?: IStreamDelegate;
     dispatch(operation: any, args: string[]): Promise<any>;

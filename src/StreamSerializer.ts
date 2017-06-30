@@ -29,9 +29,8 @@ export class StreamSerializer {
     /* Holds data left over from any previous data chunk. */
     private buffer: string;
 
-    constructor(chunkString: string) {
+    constructor(chunkString = '\n') {
         this.buffer = '';
-
         this.chunkString = chunkString;
     }
 
