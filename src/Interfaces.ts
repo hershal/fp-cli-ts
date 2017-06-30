@@ -29,7 +29,8 @@ export interface IStreamDelegate {
 
 
 export interface IStreamHandlerDelegate extends IStreamDelegate {
-    stdinStreamSerializeCharacter(): string;
+    /*  Defines the chunk creation trigger. */
+    streamChunkTrigger(): string;
 }
 
 

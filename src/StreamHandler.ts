@@ -9,7 +9,7 @@ export class StandardInputStreamHandler {
     private debug = Debug('InputParserReadFilesOptionalStandardInput');
 
     public once(stream: any): Promise<string[]> {
-        const chunkString = this.delegate.stdinStreamSerializeCharacter();
+        const chunkString = this.delegate.streamChunkTrigger();
         const serializer = new StreamSerializer(chunkString);
 
         return new Promise((resolve, reject) => {

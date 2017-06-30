@@ -15,7 +15,7 @@ class BasicStreamHandlerDelegate implements IStreamHandlerDelegate {
     }
 
     /* Delegate methods */
-    public stdinStreamSerializeCharacter(): string {
+    public streamChunkTrigger(): string {
         return this.streamSerializationString;
     }
 
