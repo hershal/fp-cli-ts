@@ -1,3 +1,6 @@
+import Debug from './Debug';
+
+
 export class StreamSerializerComplete {
     private buffers: Buffer[];
 
@@ -28,13 +31,16 @@ export class StreamSerializer {
 
     /* Holds data left over from any previous data chunk. */
     private buffer: string;
+    private debug = Debug('StreamSerializer');
 
     constructor(chunkString = '\n') {
         this.buffer = '';
         this.chunkString = chunkString;
+        this.debug(`Created with chunking string: '%o'.`, this.chunkString);
     }
 
     public serialize(rawData: Buffer, callback: (data: string) => string) {
+        this.debug(`Serialized string of length ${rawData.length}.`);
         const data = rawData.toString().split(this.chunkString);
 
         /* short-circuit */
@@ -54,6 +60,7 @@ export class StreamSerializer {
     }
 
     public flush(callback: (data: string) => void) {
+        this.debug(`Flushed stream.`);
         if (this.buffer.length === 0 || this.buffer.indexOf(this.chunkString) === 0) {
             /* do nothing */
             return;
