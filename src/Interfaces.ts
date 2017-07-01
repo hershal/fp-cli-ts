@@ -1,4 +1,4 @@
-export interface IOperation {
+export interface ISynchronousOperation {
     parse(args: string[]): Promise<string[][]>;
     run(data: string[][]): Promise<string[]>;
 }

@@ -1,4 +1,4 @@
-import { IOperation, IStreamingOperation } from './Interfaces';
+import { ISynchronousOperation, IStreamingOperation } from './Interfaces';
 import { StreamSerializerNewline } from './StreamSerializer';
 import Debug from './Debug';
 
@@ -10,7 +10,7 @@ export class TextOperation {
     protected options: ITextOperationOptions;
     private debug = Debug('TextOperation');
 
-    public parse(args: string[]): ITextOperationOptions {
+    public parse(args: string[]): void {
         this.options = undefined;
         const parser = yargs
             .option('i', {
@@ -56,12 +56,6 @@ export class TextOperation {
             outputDelimeter: parser.o,
             fields: _.split(parser.f, ',').map((s) => Number.parseInt(s))
         };
-
-        return this.options;
-    }
-
-    public run(data: string, callback: (data: string) => string): string {
-        return callback(data);
     }
 }
 
@@ -76,14 +70,18 @@ export interface ITextOperationOptions {
 export class Split extends TextOperation implements IStreamingOperation {
     public run(data: string): string {
         const inputDelim = this.options.inputDelimeterRegex;
-        const processed = _.split(data.replace(/\s+/g, ' ').trim(), new RegExp(inputDelim));
+        const processed = _.
+            split(data.replace(/\s+/g, ' ').
+                  trim(), new RegExp(inputDelim));
 
         /* If you're asking for a specific field, then return that. */
         if (this.options.fields.length > 0
             && this.options.fields[0] !== undefined
             && !isNaN(this.options.fields[0])) {
 
-            return _(this.options.fields).map((num) => processed[num]).join(this.options.outputDelimeter);
+            return _(this.options.fields)
+                .map((num) => processed[num])
+                .join(this.options.outputDelimeter);
         }
         /* Otherwise return the entire string */
         return _.join(processed, this.options.outputDelimeter);

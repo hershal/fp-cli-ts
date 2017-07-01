@@ -1,4 +1,4 @@
-import { IOperation } from './Interfaces';
+import { ISynchronousOperation } from './Interfaces';
 import { InputParserReadFilesOptionalStandardInput } from './InputParser';
 
 import * as _ from 'lodash';
@@ -17,28 +17,28 @@ export class SetOperation {
 
 /* Computes the Symmetric Difference of the input arrays. */
 /* https://en.wikipedia.org/wiki/Symmetric_difference */
-export class XOR extends SetOperation implements IOperation {
+export class XOR extends SetOperation implements ISynchronousOperation {
     public run(data: string[][]): Promise<string[]> {
         return new Promise((resolve, reject) => resolve(_.xor(...data)));
     }
 }
 
 /* Unions lists together. */
-export class Union extends SetOperation implements IOperation {
+export class Union extends SetOperation implements ISynchronousOperation {
     public run(data: string[][]): Promise<string[]> {
         return new Promise((resolve, reject) => resolve(_.union(...data)));
     }
 }
 
 /* Concatenates lists together. */
-export class Cat extends SetOperation implements IOperation {
+export class Cat extends SetOperation implements ISynchronousOperation {
     public run(data: string[][]): Promise<string[]> {
         return new Promise((resolve, reject) => resolve(_.concat(...data)));
     }
 }
 
 /* Computes the difference between the first list and the remaining lists. */
-export class Difference extends SetOperation implements IOperation {
+export class Difference extends SetOperation implements ISynchronousOperation {
     public run(data: string[][]): Promise<string[]> {
         return new Promise((resolve, reject) => resolve(_.difference(data.shift(), ...data)));
     }

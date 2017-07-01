@@ -1,10 +1,10 @@
-import { IOperation } from '../src/Interfaces';
+import { ISynchronousOperation } from '../src/Interfaces';
 import * as SetOperations from '../src/SetOperations';
 
 import * as chai from "chai";
 const expect = chai.expect;
 
-function checkOperation(operation: IOperation, input: string[][], expected: string[], callback: any) {
+function checkOperation(operation: ISynchronousOperation, input: string[][], expected: string[], callback: any) {
     operation
         .run(input)
         .then((results) => expect(results).to.deep.equal(expected))
