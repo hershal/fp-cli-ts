@@ -1,4 +1,4 @@
-import { StandardInputStreamHandler } from '../src/StreamHandler'
+import { StreamHandler } from '../src/StreamHandler'
 import { IStreamHandlerDelegate } from '../src/Interfaces'
 
 import * as chai from "chai";
@@ -31,12 +31,12 @@ class BasicStreamHandlerDelegate implements IStreamHandlerDelegate {
 
 describe('Stream Handler', function () {
     describe('StandardInputStreamHandler', function () {
-        let handler: StandardInputStreamHandler;
+        let handler: StreamHandler;
         let handlerDelegate: BasicStreamHandlerDelegate;
         let stdin: any;
 
         beforeEach(function () {
-            handler = new StandardInputStreamHandler();
+            handler = new StreamHandler();
             handlerDelegate = new BasicStreamHandlerDelegate();
             handler.delegate = handlerDelegate;
             stdin = stdio().stdin;

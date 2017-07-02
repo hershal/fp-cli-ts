@@ -3,7 +3,7 @@ import { IStreamHandlerDelegate } from './Interfaces';
 import { StreamSerializer } from './StreamSerializer';
 
 
-export class StandardInputStreamHandler {
+export class StreamHandler {
     public delegate: IStreamHandlerDelegate;
 
     private debug = Debug('InputParserReadFilesOptionalStandardInput');
