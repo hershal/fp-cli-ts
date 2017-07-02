@@ -23,7 +23,7 @@ class DispatcherStandardInputSync implements IDispatcher {
                 .then((results) => {
                     if (this.outputStreamDelegate) {
                         results.forEach((chunk: string) =>
-                            this.outputStreamDelegate.streamDidReceiveChunk(chunk));
+                                        this.outputStreamDelegate.streamDidReceiveChunk(chunk));
                         this.outputStreamDelegate.streamDidEnd();
                     }
                     resolve(results);
@@ -129,8 +129,8 @@ export default class Dispatch {
 
 
 interface IOperationHashItem {
-     /* HACK: I couldn't get the type system to let me use IDispatcher here.
-      * This is a shitty workaround. */
+    /* HACK: I couldn't get the type system to let me use IDispatcher here.
+     * This is a shitty workaround. */
     dispatcher: any;
     operation: any;
 }
