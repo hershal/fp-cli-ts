@@ -1,5 +1,5 @@
-import { IOperation, IStreamingOperation } from './Interfaces';
-import { StreamSerializerNewline } from './StreamSerializer';
+import { IStreamingOperation } from './Interfaces';
+import { StreamSerializer } from './StreamSerializer';
 import Debug from './Debug';
 
 import * as _ from 'lodash';

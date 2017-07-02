@@ -2,8 +2,8 @@ import Debug from './Debug';
 
 import * as SetOperations from './SetOperations';
 import * as TextOperations from './TextOperations';
-import { IOperation, IStreamingOperation, IDispatcher, IStreamDelegate } from './Interfaces';
-import { StreamSerializerNewline } from './StreamSerializer';
+import { ISynchronousOperation, IStreamingOperation, IDispatcher, IStreamDelegate } from './Interfaces';
+import { StreamSerializer } from './StreamSerializer';
 
 
 /* Synchronous Standard Input Dispatcher. */
@@ -15,7 +15,7 @@ class DispatcherStandardInputSync implements IDispatcher {
         this.outputStreamDelegate = delegate;
     }
 
-    public dispatch(operation: IOperation, args: string[]): Promise<string[]> {
+    public dispatch(operation: ISynchronousOperation, args: string[]): Promise<string[]> {
         return new Promise((resolve, reject) => {
             operation
                 .parse(args)
@@ -41,7 +41,7 @@ class DispatcherStandardInputSync implements IDispatcher {
  * Otherwise, the Dispatcher publishes the output to the delegate. */
 class DispatcherStandardInputStream implements IDispatcher {
     public outputStreamDelegate?: IStreamDelegate;
-    private serializer: StreamSerializerNewline;
+    private serializer: StreamSerializer;
     private debug = Debug('DispatcherStandardInputStream');
 
     /* This buffer is only used if we don't have a delegate. */
@@ -49,7 +49,7 @@ class DispatcherStandardInputStream implements IDispatcher {
 
     constructor(delegate?: IStreamDelegate) {
         this.outputStreamDelegate = delegate;
-        this.serializer = new StreamSerializerNewline();
+        this.serializer = new StreamSerializer();
         this.buffer = [];
     }
 
@@ -120,7 +120,7 @@ export default class Dispatch {
             });
         }
 
-        const operation: IOperation = new operationSelector.operation();
+        const operation: ISynchronousOperation = new operationSelector.operation();
         const dispatcher: IDispatcher = new operationSelector.dispatcher(this.streamDelegate);
 
         return dispatcher.dispatch(operation, args);

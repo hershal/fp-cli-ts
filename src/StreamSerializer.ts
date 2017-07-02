@@ -69,10 +69,3 @@ export class StreamSerializer {
         this.buffer = '';
     }
 }
-
-
-export class StreamSerializerNewline extends StreamSerializer {
-    constructor() {
-        super('\n');
-    }
-}
