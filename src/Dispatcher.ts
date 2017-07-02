@@ -28,7 +28,7 @@ class DispatcherStandardInputSync implements IDispatcher {
                     }
                     resolve(results);
                 })
-                .catch((error) => reject(error));
+                .catch((error: string) => reject(error));
         });
     }
 }
