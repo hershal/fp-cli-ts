@@ -1,11 +1,19 @@
 export interface ISynchronousOperation {
+    /* Parses the arguments in the argument array and sets opaque, internal, and
+     * subclass-specific, state of the parsed arguments. */
     parse(args: string[]): Promise<string[][]>;
+
+    /* Run the operation specified from the implemented synchronous operation. */
     run(data: string[][]): Promise<string[]>;
 }
 
 
 export interface IStreamingOperation {
+    /* Parses the arguments in the argument array and sets opaque, internal, and
+     * subclass-specific, state of the parsed arguments. */
     parse(args: string[]): void;
+
+    /* Run the operation specified from the implemented streaming operation. */
     run(data: string): string;
 }
 
