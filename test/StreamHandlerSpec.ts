@@ -1,33 +1,12 @@
 import { StreamHandler } from '../src/StreamHandler'
 import { IStreamHandlerDelegate } from '../src/Interfaces'
 
+import { BasicStreamHandlerDelegate } from './BasicStreamHandler'
+
 import * as chai from "chai";
 const expect = chai.expect;
 
 import { stdio } from 'stdio-mock';
-
-class BasicStreamHandlerDelegate implements IStreamHandlerDelegate {
-    public streamSerializationString: string;
-    public buffer: string[];
-
-    constructor() {
-        this.buffer = [];
-
-        /* Default */
-        this.streamSerializationString = '\n';
-    }
-
-    /* Delegate methods */
-    public streamChunkTriggerString(): string {
-        return this.streamSerializationString;
-    }
-
-    public streamDidReceiveChunk(chunk: string) {
-        this.buffer.push(chunk);
-    }
-
-    public streamDidEnd() { }
-}
 
 describe('Stream Handler', function () {
     describe('StandardInputStreamHandler', function () {
