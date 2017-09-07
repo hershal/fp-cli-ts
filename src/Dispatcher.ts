@@ -111,12 +111,13 @@ export class DispatcherStandardInputStream implements IDispatcher, IStreamHandle
 
 export default class Dispatch {
     private static operationHash: {[key: string]: IOperationHashItem } = {
-        cat: {dispatcher: DispatcherStandardInputSync, operation: SetOperations.Cat},
+        concat: {dispatcher: DispatcherStandardInputSync, operation: SetOperations.Concatenate},
         diff: {dispatcher: DispatcherStandardInputSync, operation: SetOperations.Difference},
         union: {dispatcher: DispatcherStandardInputSync, operation: SetOperations.Union},
         xor: {dispatcher: DispatcherStandardInputSync, operation: SetOperations.XOR},
         split: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Split},
         trim: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Trim},
+        cat: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Cat},
         /* join: {dispIInputStreamDelegaterStandardInputStream, operation: TextOperations.Join} */
     };
 

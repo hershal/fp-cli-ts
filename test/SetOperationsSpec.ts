@@ -42,20 +42,22 @@ describe('Set Operations', function() {
         });
     });
 
-    describe('Cat', function () {
+    describe('Concatenate', function () {
         it('Returns the identity with one list', function (done) {
-            checkOperation(new SetOperations.Cat(), [list0], list0, done);
+            checkOperation(new SetOperations.Concatenate(), [list0], list0, done);
         });
 
         it('Concatenates two lists', function (done) {
-            checkOperation(new SetOperations.Cat(), [list0, list1], ['one', 'two', 'three',
-                                                       'one', 'two', 'four'], done);
+            checkOperation(new SetOperations.Concatenate(),
+                           [list0, list1], ['one', 'two', 'three',
+                                            'one', 'two', 'four'], done);
         });
 
         it('Concatenates three lists', function (done) {
-            checkOperation(new SetOperations.Cat(), args, ['one', 'two', 'three',
-                                                           'one', 'two', 'four',
-                                                           'five', 'two', 'four'], done);
+            checkOperation(new SetOperations.Concatenate(),
+                           args, ['one', 'two', 'three',
+                                  'one', 'two', 'four',
+                                  'five', 'two', 'four'], done);
         });
     });
 

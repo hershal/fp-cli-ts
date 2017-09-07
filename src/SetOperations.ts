@@ -31,7 +31,7 @@ export class Union extends SetOperation implements ISynchronousOperation {
 }
 
 /* Concatenates lists together. */
-export class Cat extends SetOperation implements ISynchronousOperation {
+export class Concatenate extends SetOperation implements ISynchronousOperation {
     public run(data: string[][]): Promise<string[]> {
         return new Promise((resolve, reject) => resolve(_.concat(...data)));
     }

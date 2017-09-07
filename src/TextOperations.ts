@@ -97,3 +97,17 @@ export class Trim extends TextOperation implements IStreamingOperation {
         return _.trim(data);
     }
 }
+
+
+export class Cat implements IStreamingOperation {
+    private debug = Debug('Cat');
+    private stringToConcatenate: string;
+
+    public parse(args: string[]): void {
+        this.stringToConcatenate = args.join(' ');
+    }
+
+    public run(data: string): string {
+        return data + this.stringToConcatenate;
+    }
+}

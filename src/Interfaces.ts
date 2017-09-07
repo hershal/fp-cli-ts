@@ -13,7 +13,8 @@ export interface IStreamingOperation {
      * subclass-specific, state of the parsed arguments. */
     parse(args: string[]): void;
 
-    /* Run the operation specified from the implemented streaming operation. */
+    /* Run the operation specified from the implemented streaming operation.
+     * This function is called per-chunk of received input data. */
     run(data: string): string;
 }
 

@@ -1,5 +1,5 @@
 import Dispatch, { DispatcherStandardInputStream } from '../src/Dispatcher';
-import { Split } from '../src/TextOperations';
+import * as TextOperations from '../src/TextOperations';
 import { BasicStreamHandlerDelegate } from './BasicStreamHandler'
 
 import * as chai from 'chai';
@@ -16,9 +16,9 @@ describe('Dispatch', function () {
         dispatch = new Dispatch();
     });
 
-    it('Dispatches to Cat', function (done) {
+    it('Dispatches to Concatenate', function (done) {
         dispatch
-            .dispatch('cat', ['one', 'two']
+            .dispatch('concat', ['one', 'two']
                       .map((f) => path.resolve(__dirname + '/fixtures/' + f)))
             .then((results) => expect(results).to.be.deep.equal(['1', '2', '2', '3']))
             .then(() => done())
@@ -39,13 +39,24 @@ describe('DispatcherStandardInputStream', function () {
     });
 
     it('Dispatches a basic split async operation', function (done) {
-        const split = new Split();
+        const split = new TextOperations.Split();
         dispatch
             .dispatch(split, [`--input-delimiter`, ` `, `--output-delimiter`, `,`])
             .then(() => expect(handlerDelegate.buffer).to.deep.equal(['hello,world']))
             .then(() => done())
             .catch((err) => console.log(err));
         stdin.write('hello world');
+        stdin.end();
+    });
+
+    it('Dispatches to cat', function (done) {
+        const cat = new TextOperations.Cat();
+        dispatch
+            .dispatch(cat, [`hello world`])
+            .then(() => expect(handlerDelegate.buffer).to.deep.equal(['ellohello world', 'somethinghello world']))
+            .then(() => done())
+            .catch((err) => console.log(err));
+        stdin.write('ello\nsomething');
         stdin.end();
     });
 });
