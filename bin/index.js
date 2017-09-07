@@ -8,11 +8,12 @@ const verbose = require('../dist/Debug.js').default('Index:Verbose');
 const path = require('path');
 
 const Dispatch = require('../dist/Dispatcher.js').default;
+const DispatchDelegateConsoleLog = require('../dist/Dispatcher.js').DispatchDelegateConsoleLog;
 
 let program = path.basename(process.argv[1], '.js');
 
 debug('Starting up');
-const dispatch = new Dispatch();
+const dispatch = new Dispatch(new DispatchDelegateConsoleLog());
 
 if (program == 'index' || program == 'f') {
   process.argv.shift();

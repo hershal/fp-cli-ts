@@ -128,13 +128,7 @@ export default class Dispatch {
     private debug = Debug('Dispatch');
 
     constructor(delegate?: IStreamDelegate) {
-        if (!delegate) {
-            this.streamDelegate = new DispatchDelegateConsoleLog();
-            this.debug('Stream delegate not given, installing ConsoleLog StreamDelegate');
-        } else {
-            this.streamDelegate = delegate;
-            this.debug('Installing custom Stream Delegate');
-        }
+        this.streamDelegate = delegate;
         this.debug('Created with Stream Delegate: %o', this.streamDelegate);
     }
 
