@@ -113,3 +113,17 @@ export class Cat implements IStreamingOperation {
         return data + this.stringToConcatenate;
     }
 }
+
+
+export class Map implements IStreamingOperation {
+    private debug = Debug('Map');
+    private func: any;
+
+    public parse(args: string[]): void {
+        this.func = args.join(' ');
+    }
+
+    public run(data: string): string {
+        return eval(this.func)(data);
+    }
+}

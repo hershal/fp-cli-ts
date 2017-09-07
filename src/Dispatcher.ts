@@ -121,6 +121,7 @@ export default class Dispatch {
         split: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Split},
         trim: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Trim},
         cat: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Cat},
+        map: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Map},
         /* join: {dispIInputStreamDelegaterStandardInputStream, operation: TextOperations.Join} */
     };
     public streamDelegate?: IStreamDelegate;

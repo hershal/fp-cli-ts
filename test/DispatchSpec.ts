@@ -59,4 +59,15 @@ describe('DispatcherStandardInputStream', function () {
         stdin.write('ello\nsomething');
         stdin.end();
     });
+
+    it('Dispatches to map', function (done) {
+        const cat = new TextOperations.Map();
+        dispatch
+            .dispatch(cat, [`(x) => {const path = require('path'); return x + path.extname(x);}`])
+            .then(() => expect(handlerDelegate.buffer).to.deep.equal(['hello.world.world']))
+            .then(() => done())
+            .catch((err) => console.log(err));
+        stdin.write('hello.world');
+        stdin.end();
+    });
 });
