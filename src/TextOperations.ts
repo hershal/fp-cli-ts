@@ -105,9 +105,11 @@ export class Cat implements IStreamingOperation {
 
     public parse(args: string[]): void {
         this.stringToConcatenate = args.join(' ');
+        this.debug('Parsed arguments: %o', this.stringToConcatenate);
     }
 
     public run(data: string): string {
+        this.debug('Received string');
         return data + this.stringToConcatenate;
     }
 }

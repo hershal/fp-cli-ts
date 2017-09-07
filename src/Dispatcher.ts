@@ -43,6 +43,7 @@ export class DispatcherStandardInputSync implements IDispatcher {
  * Otherwise, the Dispatcher publishes the output to the delegate. */
 export class DispatcherStandardInputStream implements IDispatcher, IStreamHandlerDelegate {
     public outputStreamDelegate: IStreamDelegate;
+
     private streamHandler: StreamHandler;
     private debug = Debug('DispatcherStandardInputStream');
 
@@ -56,6 +57,8 @@ export class DispatcherStandardInputStream implements IDispatcher, IStreamHandle
         this.streamHandler = new StreamHandler();
         this.streamHandler.delegate = this;
         this.inputStream = inputStream;
+
+        this.debug('Created with Output Stream Delegate: %o', outputStreamDelegate);
     }
 
     public dispatch(operation: IStreamingOperation, args: string[]): Promise<void> {
@@ -120,11 +123,19 @@ export default class Dispatch {
         cat: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Cat},
         /* join: {dispIInputStreamDelegaterStandardInputStream, operation: TextOperations.Join} */
     };
-
     public streamDelegate?: IStreamDelegate;
 
+    private debug = Debug('Dispatch');
+
     constructor(delegate?: IStreamDelegate) {
-        this.streamDelegate = delegate;
+        if (!delegate) {
+            this.streamDelegate = new DispatchDelegateConsoleLog();
+            this.debug('Stream delegate not given, installing ConsoleLog StreamDelegate');
+        } else {
+            this.streamDelegate = delegate;
+            this.debug('Installing custom Stream Delegate');
+        }
+        this.debug('Created with Stream Delegate: %o', this.streamDelegate);
     }
 
     public dispatch(program: string, args: string[]): Promise<string[]> {
@@ -158,12 +169,16 @@ interface IOperationHashItem {
 
 
 export class DispatchDelegateConsoleLog implements IStreamDelegate {
+    private debug = Debug('DispatchDelegateConsoleLog');
+
     public streamDidReceiveChunk(line: string) {
+        this.debug('streamDidReceiveChunk: %o', line);
         /* tslint:disable-next-line */
         console.log(line);
     }
 
     public streamDidEnd() {
+        this.debug('streamDidEnd');
         /* nothing to do here */
     }
 }
