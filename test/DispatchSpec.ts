@@ -50,7 +50,7 @@ describe('DispatcherStandardInputStream', function () {
     });
 
     it('Dispatches to cat', function (done) {
-        const cat = new TextOperations.Cat();
+        const cat = new TextOperations.Append();
         dispatch
             .dispatch(cat, [`hello world`])
             .then(() => expect(handlerDelegate.buffer).to.deep.equal(['ellohello world', 'somethinghello world']))

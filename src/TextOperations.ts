@@ -94,23 +94,39 @@ export class Split extends TextOperation implements IStreamingOperation {
 
 export class Trim extends TextOperation implements IStreamingOperation {
     public run(data: string): string {
-        return _.trim(data);
+        return _.trim(data).replace("\n", "");
     }
 }
 
 
-export class Cat implements IStreamingOperation {
-    private debug = Debug('Cat');
-    private stringToConcatenate: string;
+export class Append implements IStreamingOperation {
+    private debug = Debug('Append');
+    private stringToAppend: string;
 
     public parse(args: string[]): void {
-        this.stringToConcatenate = args.join(' ');
-        this.debug('Parsed arguments: %o', this.stringToConcatenate);
+        this.stringToAppend = args.join(' ');
+        this.debug('Parsed arguments: %o', this.stringToAppend);
     }
 
     public run(data: string): string {
         this.debug('Received string');
-        return data + this.stringToConcatenate;
+        return data + this.stringToAppend;
+    }
+}
+
+
+export class Prepend implements IStreamingOperation {
+    private debug = Debug('Prepend');
+    private stringToPrepend: string;
+
+    public parse(args: string[]): void {
+        this.stringToPrepend = args.join(' ');
+        this.debug('Parsed arguments: %o', this.stringToPrepend);
+    }
+
+    public run(data: string): string {
+        this.debug('Received string');
+        return this.stringToPrepend + data;
     }
 }
 

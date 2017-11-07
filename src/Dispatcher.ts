@@ -120,7 +120,8 @@ export default class Dispatch {
         xor: {dispatcher: DispatcherStandardInputSync, operation: SetOperations.XOR},
         split: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Split},
         trim: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Trim},
-        cat: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Cat},
+        append: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Append},
+        prepend: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Prepend},
         map: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Map},
         /* join: {dispIInputStreamDelegaterStandardInputStream, operation: TextOperations.Join} */
     };
