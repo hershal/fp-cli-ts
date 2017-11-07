@@ -61,4 +61,10 @@ describe('Set Operations', function() {
         });
     });
 
+    describe('ShortestUnique', function () {
+        it('Basic', function (done) {
+            checkOperation(new SetOperations.ShortestUnique(), [list0], ['o', 'tw', 'th'], done);
+        });
+    });
+
 });

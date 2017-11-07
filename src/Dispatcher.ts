@@ -118,6 +118,7 @@ export default class Dispatch {
         diff: {dispatcher: DispatcherStandardInputSync, operation: SetOperations.Difference},
         union: {dispatcher: DispatcherStandardInputSync, operation: SetOperations.Union},
         xor: {dispatcher: DispatcherStandardInputSync, operation: SetOperations.XOR},
+        shortest: {dispatcher: DispatcherStandardInputSync, operation: SetOperations.ShortestUnique},
         split: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Split},
         trim: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Trim},
         append: {dispatcher: DispatcherStandardInputStream, operation: TextOperations.Append},

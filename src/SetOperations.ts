@@ -43,3 +43,40 @@ export class Difference extends SetOperation implements ISynchronousOperation {
         return Promise.resolve(_.difference(data.shift(), ...data));
     }
 }
+
+
+interface IShortestUniqueSearchElement {
+    str: string;
+    found: boolean;
+}
+
+/* Computes the shortest string necessary to uniquely address every element */
+export class ShortestUnique extends SetOperation implements ISynchronousOperation {
+    public run(data: string[][]): Promise<string[]> {
+        console.log(data);
+        return Promise.resolve(this.shortestName(data[0]));
+    }
+
+    private shortestName(strings: string[]) {
+        const ds = strings.map((s) => ({str: s, found: false}));
+        let counter = 1;
+        const uniquenames: string[] = [];
+        do {
+            const groupedNames = _(ds)
+                .filter((d: IShortestUniqueSearchElement) => !d.found)
+                .groupBy((s) => s.str.substr(0, counter))
+                .value();
+
+            Object.keys(groupedNames).forEach((key) => {
+                const value = groupedNames[key];
+                if (value.length === 1) {
+                    uniquenames.push(key);
+                    value[0].found = true;
+                }
+            });
+            counter++;
+        } while (uniquenames.length !== strings.length);
+
+        return uniquenames;
+    }
+}
