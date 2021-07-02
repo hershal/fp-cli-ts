@@ -1,7 +1,7 @@
 {
-  "name": "fp-cli-ts",
+  "name": "functional-cli",
   "version": "0.0.0",
-  "description": "fp-cli-ts",
+  "description": "Functional constructs in your CLI",
   "license": "MIT",
   "repository": "",
   "author": "",
