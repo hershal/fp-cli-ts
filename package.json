@@ -65,6 +65,6 @@
     "all": true
   },
   "bin": {
-    "f": "./bin/index.js"
+    "f": "bin/index.js"
   }
 }
